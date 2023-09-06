@@ -1,5 +1,5 @@
 import React from "react";
-import axios from "axios";
+import { signup } from '../api/apiCalls'
 
 class UserSignUpPage extends React.Component{
 
@@ -8,7 +8,8 @@ class UserSignUpPage extends React.Component{
         agreedClicked: false,
         displayName: null,
         password: null,
-        passwordRepeat: null
+        passwordRepeat: null,
+        pendingApiCall: false
     };
 
     onChange = event => {
@@ -25,7 +26,7 @@ class UserSignUpPage extends React.Component{
         });
     };
 
-    onClickSignup = event => {
+    onClickSignup = async event => {
         event.preventDefault(); //browser'ın bizim yerimize bir yere gönderemeye çalışmasını engelliyoruz.
         
         const { username, displayName, password} = this.state;
@@ -35,7 +36,22 @@ class UserSignUpPage extends React.Component{
             displayName,
             password: password
         }
-        axios.post('/api/1.0/users', body)
+
+        this.setState({ pendingApiCall: true });
+
+        try{
+        const response = await signup(body);
+        } catch(error){
+
+        }
+        this.setState({ pendingApiCall: false });
+    //    signup(body)
+    //         .then(response => {
+    //             this.setState({ pendingApiCall: false });
+    //         })
+    //         .catch(error =>{
+    //         this.setState({ pendingApiCall: false });
+    //     });
     }
 
 /*
@@ -66,28 +82,35 @@ class UserSignUpPage extends React.Component{
 
 
     render(){
+        const { pendingApiCall } = this.state;
+
         return(
+            <div className="container">
             <form>
-            <h1>Sign Up</h1>
-            <div>
+            <h1 className="text-center">Sign Up</h1>
+            <div class="form-group">
             <label>Username</label>
-            <input name="username" onChange={this.onChange}></input>
+            <input class="form-control" name="username" onChange={this.onChange} ></input>
             </div>
-            <div>
+            <div className="form-group">
             <label>Display Name</label>
-            <input name="displayName" onChange={this.onChange}></input>
+            <input className="form-control" name="displayName" onChange={this.onChange}></input>
             </div>
-            <div>
+            <div className="form-group">
             <label>Password</label>
-            <input name="password" type="password" onChange={this.onChange}></input>
+            <input className="form-control" name="password" type="password" onChange={this.onChange}></input>
             </div>
-            <div>
+            <div className="form-group">
             <label>Password Repeat</label>
-            <input name="passwordRepeat" type="password" onChange={this.onChange}></input>
+            <input className="form-control" name="passwordRepeat" type="password" onChange={this.onChange}></input>
             </div>
             <input type="checkbox" onChange={this.onChangeAgree}></input> Agreed
-            <button onClick={this.onClickSignup} disabled={!this.state.agreedClicked}>Sign Up</button>
-            </form>
+            <div className="text-center">
+            <button className="btn btn-primary" onClick={this.onClickSignup} disabled={pendingApiCall}>
+                {pendingApiCall && <span className="spinner-border spinner-border-sm"></span>}Sign Up</button>
+            </div>
+            </form>      
+            </div>
         );
     }
 }
