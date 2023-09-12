@@ -18,6 +18,15 @@ class UserSignUpPage extends React.Component{
         const { name, value } = event.target; //obje parçalama (object destruction)
         const errors = {...this.state.errors}; //spread operator
         errors[name] = undefined;
+        if (name === 'password' || name === 'passwordRepeat'){
+            if( name === 'password' && value !== this.state.passwordRepeat ){ //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                errors.passwordRepeat = 'Password mismatch';
+            } else if ( name === 'passwordRepeat' && value !== this.state.password){
+                errors.passwordRepeat = 'Password mismatch';
+            } else {
+                errors.passwordRepeat = undefined;
+            }
+        }
         this.setState({  //hata mesajını state'e attık!!!
             [name]: value,
             errors
@@ -89,7 +98,7 @@ class UserSignUpPage extends React.Component{
 
     render(){
         const { pendingApiCall, errors } = this.state; //object destruction
-        const { username, displayName, password } = errors; //object destruction
+        const { username, displayName, password, passwordRepeat } = errors; //object destruction
 
         return(
             <div className="container">
@@ -98,13 +107,9 @@ class UserSignUpPage extends React.Component{
             <Input name= "username" label="Username" error={username} onChange={this.onChange}></Input>
             <Input name= "displayName" label="Display Name" error={displayName} onChange={this.onChange}></Input>
             <Input name= "password" label="Password" error={password} onChange={this.onChange} type="password"></Input>
-            <div className="form-group">
-            <label>Password Repeat</label>
-            <input className="form-control" name="passwordRepeat" type="password" onChange={this.onChange}></input>
-            </div>
-            <input type="checkbox" onChange={this.onChangeAgree}></input> Agreed
+            <Input name= "passwordRepeat" label="Password Repeat" error={passwordRepeat} onChange={this.onChange} type="password"></Input>
             <div className="text-center">
-            <button className="btn btn-primary" onClick={this.onClickSignup} disabled={pendingApiCall}>
+            <button className="btn btn-primary" onClick={this.onClickSignup} disabled={pendingApiCall || passwordRepeat !== undefined}>
                 {pendingApiCall && <span className="spinner-border spinner-border-sm"></span>}Sign Up</button>
             </div>
             </form>      
