@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import Input from '../components/Input'
-import { login } from '../api/apiCalls'
+import Input from '../components/Input';
+import { login } from '../api/apiCalls';
  
 class LoginPage extends Component {
     state = {
