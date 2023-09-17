@@ -2,16 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import './bootstrap-override.scss'
-import App from './App';
-import UserSignUpPage from './pages/UserSignUpPage';
-import LoginPage from './pages/LoginPage';
+import App from './container/App';
 import reportWebVitals from './reportWebVitals';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <LoginPage/>
-  </React.StrictMode>
+  <App></App>
 );
 
 // If you want to start measuring performance in your app, pass a function
