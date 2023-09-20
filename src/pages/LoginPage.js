@@ -21,16 +21,24 @@ class LoginPage extends Component {
     onClickLogin = async event => {
         event.preventDefault();
         const { username, password } = this.state;
+        const { onLoginSuccess } = this.props;
         const creds = {
             username,
             password
-        }
+        };
+
+        const { push } = this.props.history;
         this.setState({
             error: null
         })
         try{
+            console.log("username: ",username);
+            console.log("creds: ",creds);
             await login(creds);
+            push('/');
+            onLoginSuccess(username); //!!!!!!!!!kaldırınca çözülüyor??
         } catch(apiError){
+            console.log("apierror: ", apiError);
             this.setState({
                 error: apiError.response.data.message
             })

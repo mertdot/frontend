@@ -9,15 +9,12 @@ return class extends Component {
     };
 
     componentDidMount(){
-        axios.interceptors.request.use((request) => {
-          //  if(request.url == this.props.path){
-          //      this.setState({pendingApiCall: true});
-          //  }
+        this.requestInterceptor = axios.interceptors.request.use((request) => {
           this.updateApiCallFor (request.url, true)
             return request;
         })
 
-        axios.interceptors.response.use((response) => {
+        this.responseInterceptor = axios.interceptors.response.use((response) => {
             // if(response.config.url == this.props.path){
             //     this.setState({pendingApiCall: false});
             // }
@@ -31,6 +28,11 @@ return class extends Component {
             this.setState({pendingApiCall: false});
             throw error;
         })
+    }
+
+    componentWillUnmount(){
+        axios.interceptors.request.eject(this.requestInterceptor);
+        axios.interceptors.response.eject(this.responseInterceptor);
     }
 
     updateApiCallFor = (url, inProgress) =>{
