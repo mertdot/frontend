@@ -4,11 +4,14 @@ import './index.css';
 import './bootstrap-override.scss'
 import App from './container/App';
 import reportWebVitals from './reportWebVitals';
+import AuthenticationContext from './shared/AuthenticationContext';
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  <AuthenticationContext>
   <App></App>
+  </AuthenticationContext>
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import logo from'../assests/logo.png';
 import { Link } from 'react-router-dom' //Browser Router'a geçersek diye hrefi kaldırdık to'yu ekledik. hash işareti problemi
+import { Authentication } from '../shared/AuthenticationContext';
 
 class TopBar extends Component {
 
+    static contextType = Authentication;
+
     render() {
-
-        const { isLoggedIn, username, onLogoutSuccess } = this.props;
-
+        const { state, onLogoutSuccess } = this.context;
+        const { isLoggedIn, username } = state;
         let links = (
 
             <ul className="navbar-nav ml-auto">
@@ -34,6 +36,8 @@ class TopBar extends Component {
                 </nav>
             </div>
         );
+
+        
     }
 }
 

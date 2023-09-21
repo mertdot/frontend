@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import Input from '../components/Input';
 import { login } from '../api/apiCalls';
 import ButtonWithProgress from '../components/ButtonWithProgress';
+import { Authentication } from '../shared/AuthenticationContext';
  
 class LoginPage extends Component {
+    static contextType = Authentication;
     state = {
         username: null,
         password: null,
@@ -21,7 +23,7 @@ class LoginPage extends Component {
     onClickLogin = async event => {
         event.preventDefault();
         const { username, password } = this.state;
-        const { onLoginSuccess } = this.props;
+        const { onLoginSuccess } = this.context;
         const creds = {
             username,
             password
@@ -34,9 +36,16 @@ class LoginPage extends Component {
         try{
             console.log("username: ",username);
             console.log("creds: ",creds);
-            await login(creds);
+            const response = await login(creds);
             push('/');
-            onLoginSuccess(username); //!!!!!!!!!kaldırınca çözülüyor??
+
+
+            const authState = {
+                ...response.data,
+                password
+            }
+
+            onLoginSuccess(authState);
         } catch(apiError){
             console.log("apierror: ", apiError);
             this.setState({
