@@ -2,16 +2,16 @@ import React, { Component } from 'react';
 import logo from'../assests/logo.png';
 import { Link } from 'react-router-dom' //Browser Router'a geçersek diye hrefi kaldırdık to'yu ekledik. hash işareti problemi
 import { Authentication } from '../shared/AuthenticationContext';
+import { connect } from 'react-redux';
+import { logoutSucces } from '../redux/authActions';
 
 class TopBar extends Component {
 
-    static contextType = Authentication;
+    //static contextType = Authentication;
 
     render() {
-        const { state, onLogoutSuccess } = this.context;
-        const { isLoggedIn, username } = state;
+        const { username, isLoggedIn, onLogoutSuccess } = this.props;
         let links = (
-
             <ul className="navbar-nav ml-auto">
             <li><Link className="nav-link" to="/login">Login</Link></li>
             <li><Link className="nav-link" to="/signup">Sign Up</Link></li>
@@ -22,7 +22,7 @@ class TopBar extends Component {
         if(isLoggedIn){
             links =  (
                 <ul className="navbar-nav ml-auto">
-                <li><Link className="nav-link" onClick={onLogoutSuccess} style={{cursor: 'pointer'}}>Logout</Link></li>
+                <li><Link className="nav-link" to="/" onClick={onLogoutSuccess} style={{cursor: 'pointer'}}>Logout</Link></li>
                 <li><Link className="nav-link" to={`/user/${username}`}>{username}</Link></li>
             </ul>
             )
@@ -41,4 +41,17 @@ class TopBar extends Component {
     }
 }
 
-export default TopBar;
+const mapStateToProps = (store) => {
+    return{
+        isLoggedIn: store.isLoggedIn,
+        username: store.username
+    };
+};
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onLogoutSuccess: () => dispatch(logoutSucces())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TopBar);

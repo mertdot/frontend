@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import Input from '../components/Input';
 import { login } from '../api/apiCalls';
 import ButtonWithProgress from '../components/ButtonWithProgress';
-import { Authentication } from '../shared/AuthenticationContext';
+//import { Authentication } from '../shared/AuthenticationContext';
+import { connect } from 'react-redux';
+import { loginSuccess } from '../redux/authActions';
  
 class LoginPage extends Component {
-    static contextType = Authentication;
+//    static contextType = Authentication;
     state = {
         username: null,
         password: null,
@@ -23,7 +25,6 @@ class LoginPage extends Component {
     onClickLogin = async event => {
         event.preventDefault();
         const { username, password } = this.state;
-        const { onLoginSuccess } = this.context;
         const creds = {
             username,
             password
@@ -45,7 +46,7 @@ class LoginPage extends Component {
                 password
             }
 
-            onLoginSuccess(authState);
+            this.props.onLoginSuccess(authState)
         } catch(apiError){
             console.log("apierror: ", apiError);
             this.setState({
@@ -82,4 +83,10 @@ class LoginPage extends Component {
     }
 }
 
-export default LoginPage;
+const mapDispatchToProps = (dispatch) => {
+    return{
+        onLoginSuccess: (authState) => dispatch(loginSuccess(authState))
+        }
+    }
+
+export default connect(null, mapDispatchToProps)(LoginPage);
