@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import Input from '../components/Input';
-import { login } from '../api/apiCalls';
 import ButtonWithProgress from '../components/ButtonWithProgress';
 //import { Authentication } from '../shared/AuthenticationContext';
 import { connect } from 'react-redux';
-import { loginSuccess } from '../redux/authActions';
+import { loginHandler, loginSuccess } from '../redux/authActions';
  
 class LoginPage extends Component {
 //    static contextType = Authentication;
@@ -30,28 +29,20 @@ class LoginPage extends Component {
             password
         };
 
+        const { history, dispatch } = this.props;
         const { push } = this.props.history;
         this.setState({
             error: null
         })
         try{
-            console.log("username: ",username);
-            console.log("creds: ",creds);
-            const response = await login(creds);
+            await dispatch(loginHandler(creds))
             push('/');
-
-
-            const authState = {
-                ...response.data,
-                password
-            }
-
-            this.props.onLoginSuccess(authState)
         } catch(apiError){
+            console.log(apiError)
             console.log("apierror: ", apiError);
-            this.setState({
-                error: apiError.response.data.message
-            })
+             this.setState({
+                 error: apiError.response.data.message
+             })
         }
     }
 
@@ -83,10 +74,4 @@ class LoginPage extends Component {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return{
-        onLoginSuccess: (authState) => dispatch(loginSuccess(authState))
-        }
-    }
-
-export default connect(null, mapDispatchToProps)(LoginPage);
+export default connect()(LoginPage);

@@ -42,13 +42,8 @@ return class extends Component {
     }
 
     render() {
-        const { pendingApiCall } = this.state;
-        /* return (
-            <div>
-                {React.cloneElement(this.props.children, {pendingApiCall})}
-            </div>
-        );*/
-        return <WrappedComponent pendingApiCall={pendingApiCall}></WrappedComponent>
+        const pendingApiCall = this.state.pendingApiCall || this.props.pendingApiCall
+        return <WrappedComponent {... this.props} pendingApiCall={pendingApiCall}  ></WrappedComponent>
     }
 }
 }

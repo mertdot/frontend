@@ -3,6 +3,8 @@ import { signup } from '../api/apiCalls'
 import Input from '../components/Input'
 import ButtonWithProgress from "../components/ButtonWithProgress";
 import { withApiProgress } from "../shared/withApiProgress";
+import { connect } from "react-redux";
+import { signupHandler } from "../redux/authActions";
 
 
 class UserSignUpPage extends React.Component{
@@ -44,54 +46,26 @@ class UserSignUpPage extends React.Component{
     onClickSignup = async event => {
         event.preventDefault(); //browser'ın bizim yerimize bir yere gönderemeye çalışmasını engelliyoruz.
         
+        const { history, dispatch } = this.props;
+        const { push } = history;
         const { username, displayName, password} = this.state;
 
         const body = { //js key ve value aynı referans isme sahipse o zaman sadece key yazmak yeterli.
             username,
             displayName,
-            password: password
+            password
         }
 
         try{
-        const response = await signup(body);
+            await dispatch(signupHandler(body));
+            push('/');
         } catch(error){
             if(error.response.data.validationErrors){
                 this.setState({errors: error.response.data.validationErrors});
             }
         }
-    //    signup(body)
-    //         .then(response => {
-    //             this.setState({ pendingApiCall: false });
-    //         })
-    //         .catch(error =>{
-    //         this.setState({ pendingApiCall: false });
-    //     });
-    }
-
-/*
-    onChangeUsername = event => {
-    this.setState({
-        username: event.target.value
-    });
     };
 
-    onChangeDisplayName = event => {
-        this.setState({
-            displayName: event.target.value
-        });
-        };
-    onChangePassword = event => {
-        this.setState({
-            password: event.target.value
-        });
-        };       
-
-    onChangePasswordRepeat = event => {
-        this.setState({
-            passwordRepeat: event.target.value
-        });
-        };
-*/
 
 
 
@@ -123,6 +97,10 @@ class UserSignUpPage extends React.Component{
     }
 }
 
-const UserSignUpPageWithApiProgress = withApiProgress(UserSignUpPage, '/api/1.0/users');
+const UserSignUpPageWithApiProgressForSignupRequest = withApiProgress(UserSignUpPage, '/api/1.0/users');
 
-export default UserSignUpPageWithApiProgress
+const UserSignupPageWithApiProgressForAuthRequest = withApiProgress(UserSignUpPageWithApiProgressForSignupRequest, '/api/1.0/auth');
+
+
+
+export default connect()(UserSignupPageWithApiProgressForAuthRequest)
