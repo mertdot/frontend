@@ -31,7 +31,7 @@ class TopBar extends Component {
         return (
             <div className='shadow-sm bg-light mb-2'>
                 <nav className="navbar navbar-light container navbar-expand">
-                    <Link className="navbar-brand" to="/"> <img src={logo} width="60" alt="Business Card Logo"></img>Business Card</Link>   
+                    <Link className="navbar-brand" to="/"> <img src={logo} width="60" alt="Business Card Logo"></img>Front-End (Önyüz)</Link>   
                     {links}
                 </nav>
             </div>

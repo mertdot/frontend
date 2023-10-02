@@ -5,9 +5,9 @@ import { connect } from 'react-redux';
 
 const ProfileCard = (props) => {
     const pathUsername = props.match.params.username;
-    let message = "we cannot edit";
+    let message = "login yapmamış kullanıcının sayfası";
     if(pathUsername === props.loggedInUsername){
-        message = "we can edit";
+        message = "login yapmış kullanıcının sayfası";
     }
     return (
         <div>
@@ -15,18 +15,6 @@ const ProfileCard = (props) => {
         </div>
     );
 };
-
-
-// class ProfileCardContextWrapper extends React.Component {
-//     static contextType = Authentication;
-//     render() {
-//         return (
-//             <div>
-//                 <ProfileCard {...this.props} username={this.context.state.username}></ProfileCard>
-//             </div>
-//         );
-//     }
-// }
 
 const mapStateToProps = (store) => {
     return{

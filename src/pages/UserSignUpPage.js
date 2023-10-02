@@ -23,7 +23,7 @@ class UserSignUpPage extends React.Component{
         const errors = {...this.state.errors}; //spread operator
         errors[name] = undefined;
         if (name === 'password' || name === 'passwordRepeat'){
-            if( name === 'password' && value !== this.state.passwordRepeat ){ //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            if( name === 'password' && value !== this.state.passwordRepeat ){
                 errors.passwordRepeat = 'Password mismatch';
             } else if ( name === 'passwordRepeat' && value !== this.state.password){
                 errors.passwordRepeat = 'Password mismatch';
